@@ -14,7 +14,5 @@ set MONO_PACKAGE_LIB_PATH=./libs/%MONO_PACKAGE%/runtimes/android-arm64
 if exist %MONO_PACKAGE_LIB_PATH% (
     adb shell rm -f -rR /data/local/tmp/Mono
     adb push %MONO_PACKAGE_LIB_PATH%/native/ /data/local/tmp/Mono/
-    adb push %MONO_PACKAGE_LIB_PATH%/lib/net9.0 /data/local/tmp/Mono/
     adb shell chmod 755 /data/local/tmp/Mono/*.*
-    adb shell chmod 755 /data/local/tmp/Mono/net9.0/*.*
 )

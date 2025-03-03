@@ -23,20 +23,9 @@ int main(int argc, char *argv[])
     const char *MONO_LIB_NATIVE_PATH = getenv("MONO_LIB_NATIVE_PATH");
     if (!MONO_LIB_NATIVE_PATH)
         MONO_LIB_NATIVE_PATH = "/data/local/tmp/Mono";
-    const char *MONO_LIB_DOTNET_PATH = getenv("MONO_LIB_DOTNET_PATH");
-    if (!MONO_LIB_DOTNET_PATH)
-        MONO_LIB_DOTNET_PATH = "/data/local/tmp/Mono/net9.0";
-
-    std::cout << "🔹 Set mono_set_assemblies_path(\"/system/lib64\") " << std::endl;
-    mono_set_assemblies_path("/system/lib64");
-    std::cout << "🔹 Set mono_set_assemblies_path(\"/apex/com.android.runtime/lib64/bionic\")" << std::endl;
-    mono_set_assemblies_path("/apex/com.android.runtime/lib64/bionic");
 
     std::cout << "🔹 Set MONO_LIB_NATIVE_PATH mono_set_assemblies_path(\"" << MONO_LIB_NATIVE_PATH << "\")" << std::endl;
-    mono_set_assemblies_path(MONO_LIB_NATIVE_PATH);
-
-    std::cout << "🔹 Set MONO_LIB_DOTNET_PATH mono_set_assemblies_path(\"" << MONO_LIB_DOTNET_PATH << "\")" << std::endl;
-    mono_set_assemblies_path(MONO_LIB_DOTNET_PATH);
+    mono_set_assemblies_path(MONO_LIB_NATIVE_PATH);//set one time, only for mono native
 
     mono_jit_parse_options(argc, (char **)argv);
     mono_debug_init(MONO_DEBUG_FORMAT_MONO);

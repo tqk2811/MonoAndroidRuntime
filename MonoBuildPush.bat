@@ -23,6 +23,5 @@ adb push ./build/MonoRuntime /data/local/tmp/Mono/MonoRuntime
 adb shell chmod 755 /data/local/tmp/Mono/MonoRuntime
 
 adb shell LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/data/local/tmp/Mono ^
-MONO_PATH=/data/local/tmp/Mono ^
 /data/local/tmp/Mono/MonoRuntime
 )
