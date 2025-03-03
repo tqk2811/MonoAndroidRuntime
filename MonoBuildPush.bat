@@ -1,9 +1,5 @@
 call .\Init.bat
 rmdir /S /Q .\build
-
-set ANDROID_NDK_HOME=%userprofile%/AppData/Local/Android/Sdk/ndk/28.0.12916984
-set ANDROID_SDK_ROOT=%userprofile%/AppData/Local/Android/Sdk
-set PATH=%ANDROID_NDK_HOME%;%PATH%
 cmake -S . -B ./build ^
     -G "Ninja" ^
     -DANDROID_NDK=%ANDROID_NDK_HOME% ^
