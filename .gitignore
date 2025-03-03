@@ -1,0 +1,7 @@
+.vscode
+/build
+/libs
+bin
+.vs
+obj
+*.sln

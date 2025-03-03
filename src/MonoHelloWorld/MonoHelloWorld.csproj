@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0;net9.0-android35.0</TargetFrameworks>
+		<!-- <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion> -->
+		<RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
+
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
+		
+		<OutputType>Exe</OutputType>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-android35.0'">		
+		<AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>  <!-- 🔹 Dùng Mono runtime -->
+		<AndroidEnableLLVM>false</AndroidEnableLLVM>  <!-- 🔹 Không cần LLVM -->
+		<AndroidLinkMode>None</AndroidLinkMode>  <!-- 🔹 Tránh lỗi khi chạy với Mono -->
+		<PublishTrimmed>false</PublishTrimmed>  <!-- 🔹 Tránh cắt bớt code quan trọng -->
+		<SelfContained>false</SelfContained>  <!-- 🔹 Không đóng gói runtime -->
+	</PropertyGroup>
+
+</Project>

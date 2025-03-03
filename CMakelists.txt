@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.31.0)
+
+project(MonoRuntime)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)  # Đảm bảo chỉ sử dụng chuẩn C++ chính thống, không dùng mở rộng của compiler
+# set(CMAKE_SYSTEM_NAME Android)
+# set(CMAKE_SYSTEM_VERSION 21) # API Level 21 trở lên cho ARM64
+# set(CMAKE_ANDROID_ARCH_ABI arm64-v8a)
+# set(CMAKE_ANDROID_NDK $ENV{ANDROID_NDK_HOME})
+# set(CMAKE_ANDROID_STL_TYPE c++_static)
+
+include_directories(${CMAKE_SOURCE_DIR}/libs/${MONO_PACKAGE}/runtimes/android-arm64/native/include/mono-2.0)
+link_directories(
+    ${CMAKE_SOURCE_DIR}/libs/${MONO_PACKAGE}/runtimes/android-arm64/native 
+    # $ENV{ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/aarch64-linux-android
+    # $ENV{ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/aarch64-linux-android/${CMAKE_SYSTEM_VERSION}
+    )
+
+add_executable(MonoRuntime src/MonoRuntime.cpp)
