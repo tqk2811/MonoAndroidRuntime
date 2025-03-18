@@ -1,17 +1,28 @@
 #if ANDROID
+using Android.Media.Projection;
+using Android.Runtime;
 using Android.Util;
+using Android.OS;
+using Android.App;
+using Android.Content;
 #endif
+using System;
+using System.Runtime.InteropServices;
 namespace MonoHelloWorld
 {
     public static class Program
     {
         public static void Main()
         {
-            // Console.WriteLine("Hello Mono World");
-            // Console.ReadLine();
 #if ANDROID
-            Log.Info("MonoAndroid", "✅ Hello từ Mono trên Android!");
+            var vibrator = (Vibrator)Application.Context.GetSystemService(Context.VibratorManagerService)!;
+            vibrator.Vibrate(VibrationEffect.CreateOneShot(1000, VibrationEffect.DefaultAmplitude));
+
+            IntPtr powerManagerClass = JNIEnv.FindClass("android/os/PowerManager");
+            IntPtr methodId = JNIEnv.GetMethodID(powerManagerClass, "goToSleep", "(J)V");
+            JNIEnv.CallVoidMethod(powerManagerClass, methodId, new JValue(0));
 #endif
+            Console.WriteLine("Hello Mono World");
         }
     }
 }

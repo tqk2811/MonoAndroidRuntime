@@ -12,6 +12,53 @@
 #include <stdio.h>
 #pragma comment(lib, "libmonosgen-2.0.so")
 
+MonoMethod *GetEntryPoint(MonoImage *image)
+{
+    std::cout << "🔹 mono_image_get_entry_point " << std::endl;
+    uint32_t entry_token = mono_image_get_entry_point(image);
+    if (entry_token)
+    {
+        // 🔹 Lấy method EntryPoint từ Token
+        std::cout << "🔹 mono_get_method " << std::endl;
+        MonoMethod *entry_method = mono_get_method(image, entry_token, NULL);
+        if (entry_method)
+        {
+            return entry_method;
+        }
+        else
+        {
+            std::cerr << "❌ mono_get_method from entry_point_token failed\n";
+        }
+    }
+    else
+    {
+        std::cerr << "❌ mono_image_get_entry_point failed\n";
+    }
+
+    const char *DOTNET_ENTRYPOINT_PATH = getenv("DOTNET_ENTRYPOINT_PATH");
+    if (DOTNET_ENTRYPOINT_PATH)
+    {
+        std::cout << "🔹 mono_method_desc_new(\"" << DOTNET_ENTRYPOINT_PATH << "\")" << std::endl;
+        MonoMethodDesc *desc = mono_method_desc_new(DOTNET_ENTRYPOINT_PATH, false);
+        if (desc)
+        {
+            std::cout << "🔹 mono_method_desc_search_in_image" << std::endl;
+            MonoMethod *method = mono_method_desc_search_in_image(desc, image);
+            if(!method)
+            {
+                std::cerr << "❌ mono_method_desc_search_in_image failed\n";
+            }
+            mono_method_desc_free(desc);
+            return method;
+        }
+        else
+        {
+            std::cerr << "❌ mono_method_desc_new failed\n";
+        }
+    }
+    return nullptr;
+}
+
 int main(int argc, char *argv[])
 {
     std::cout << "Args:" << std::endl;
@@ -25,7 +72,7 @@ int main(int argc, char *argv[])
         MONO_LIB_NATIVE_PATH = "/data/local/tmp/Mono";
 
     std::cout << "🔹 Set MONO_LIB_NATIVE_PATH mono_set_assemblies_path(\"" << MONO_LIB_NATIVE_PATH << "\")" << std::endl;
-    mono_set_assemblies_path(MONO_LIB_NATIVE_PATH);//set one time, only for mono native
+    mono_set_assemblies_path(MONO_LIB_NATIVE_PATH); // set one time, only for mono native
 
     mono_jit_parse_options(argc, (char **)argv);
     mono_debug_init(MONO_DEBUG_FORMAT_MONO);
@@ -33,7 +80,7 @@ int main(int argc, char *argv[])
 
     std::cout << "🔹 mono_jit_init " << std::endl;
     MonoDomain *domain = mono_jit_init("MonoRuntime");
-
+    
     const char *MONO_EXECUTE_ASSEMBLY = getenv("MONO_EXECUTE_ASSEMBLY");
     if (!MONO_EXECUTE_ASSEMBLY)
     {
@@ -56,20 +103,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    std::cout << "🔹 mono_image_get_entry_point " << std::endl;
-    uint32_t entry_token = mono_image_get_entry_point(image);
-    if (!entry_token)
-    {
-        std::cerr << "❌ mono_image_get_entry_point failed\n";
-        return 1;
-    }
-
-    // 🔹 Lấy method EntryPoint từ Token
-    std::cout << "🔹 mono_get_method " << std::endl;
-    MonoMethod *entry_method = mono_get_method(image, entry_token, NULL);
+    MonoMethod *entry_method = GetEntryPoint(image);
     if (!entry_method)
     {
-        std::cerr << "❌ mono_get_method from entry_point_token failed\n";
+        std::cerr << "❌ GetEntryPoint failed\n";
         return 1;
     }
 
