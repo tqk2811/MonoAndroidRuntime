@@ -1,4 +1,4 @@
-# Mono Android Runtime
+# Mono Android Runtime ( linux process )
 Required  
     + cmake  
     + Ninja  
