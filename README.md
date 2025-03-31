@@ -9,4 +9,4 @@ Required
 Usage  
     - InstallMono.bat  
     - MonoRuntimeBuildPush.bat  
-    - Test*.bat
+    - Test*.bat (root requied for TestCsharpAndroid)
