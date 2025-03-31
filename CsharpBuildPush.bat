@@ -1,3 +1,5 @@
+call .\Init.bat
+
 dotnet build -f %CS_TARGET_FRAMEWORK% .\src\MonoHelloWorld\MonoHelloWorld.csproj
 adb shell rm -f -rR %PUSH_DIR%
 adb push ./src/MonoHelloWorld/bin/Debug/%CS_TARGET_FRAMEWORK% %PUSH_DIR%/
