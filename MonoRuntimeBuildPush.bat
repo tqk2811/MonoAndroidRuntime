@@ -22,7 +22,8 @@ if exist ./build/MonoRuntime (
 adb push ./build/MonoRuntime /data/local/tmp/Mono/MonoRuntime
 adb shell chmod 755 /data/local/tmp/Mono/MonoRuntime
 
-adb push ./build/MonoRuntime /data/local/tmp/Mono/MonoRuntime
+adb root
+adb push ./build/MonoRuntime /data/local/tmp/Mono/MonoRuntimeSu
 adb shell chmod u+s /data/local/tmp/Mono/MonoRuntimeSu
 
 adb shell LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/data/local/tmp/Mono ^
