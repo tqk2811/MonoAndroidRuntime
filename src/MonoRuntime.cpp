@@ -14,12 +14,12 @@
 
 MonoMethod *GetEntryPoint(MonoImage *image)
 {
-    std::cout << "🔹 mono_image_get_entry_point " << std::endl;
+    std::cerr << "🔹 mono_image_get_entry_point " << std::endl;
     uint32_t entry_token = mono_image_get_entry_point(image);
     if (entry_token)
     {
         // 🔹 Lấy method EntryPoint từ Token
-        std::cout << "🔹 mono_get_method " << std::endl;
+        std::cerr << "🔹 mono_get_method " << std::endl;
         MonoMethod *entry_method = mono_get_method(image, entry_token, NULL);
         if (entry_method)
         {
@@ -38,7 +38,7 @@ MonoMethod *GetEntryPoint(MonoImage *image)
     const char *DOTNET_ENTRYPOINT_PATH = getenv("DOTNET_ENTRYPOINT_PATH");
     if (DOTNET_ENTRYPOINT_PATH)
     {
-        std::cout << "🔹 mono_method_desc_new(\"" << DOTNET_ENTRYPOINT_PATH << "\")" << std::endl;
+        std::cerr << "🔹 mono_method_desc_new(\"" << DOTNET_ENTRYPOINT_PATH << "\")" << std::endl;
         MonoMethodDesc *desc = mono_method_desc_new(DOTNET_ENTRYPOINT_PATH, false);
         if (desc)
         {
@@ -61,33 +61,33 @@ MonoMethod *GetEntryPoint(MonoImage *image)
 
 int main(int argc, char *argv[])
 {
-    std::cout << "Args:" << std::endl;
+    std::cerr << "Args:" << std::endl;
     for (int i = 0; i < argc; i++)
     {
-        std::cout << "\t" << argv[i] << std::endl;
+        std::cerr << "\t" << argv[i] << std::endl;
     }
 
     const char *MONO_LIB_NATIVE_PATH = getenv("MONO_LIB_NATIVE_PATH");
     if (!MONO_LIB_NATIVE_PATH)
         MONO_LIB_NATIVE_PATH = "/data/local/tmp/Mono";
 
-    std::cout << "🔹 Set MONO_LIB_NATIVE_PATH mono_set_assemblies_path(\"" << MONO_LIB_NATIVE_PATH << "\")" << std::endl;
+    std::cerr << "🔹 Set MONO_LIB_NATIVE_PATH mono_set_assemblies_path(\"" << MONO_LIB_NATIVE_PATH << "\")" << std::endl;
     mono_set_assemblies_path(MONO_LIB_NATIVE_PATH); // set one time, only for mono native
 
     mono_jit_parse_options(argc, (char **)argv);
     mono_debug_init(MONO_DEBUG_FORMAT_MONO);
     // mono_jit_set_aot_only(true);
 
-    std::cout << "🔹 mono_jit_init " << std::endl;
+    std::cerr << "🔹 mono_jit_init " << std::endl;
     MonoDomain *domain = mono_jit_init("MonoRuntime");
     
     const char *MONO_EXECUTE_ASSEMBLY = getenv("MONO_EXECUTE_ASSEMBLY");
     if (!MONO_EXECUTE_ASSEMBLY)
     {
-        std::cout << "env MONO_EXECUTE_ASSEMBLY is missing" << std::endl;
+        std::cerr << "env MONO_EXECUTE_ASSEMBLY is missing" << std::endl;
         return 1;
     }
-    std::cout << "🔹 mono_domain_assembly_open(\"" << MONO_EXECUTE_ASSEMBLY << "\")" << std::endl;
+    std::cerr << "🔹 mono_domain_assembly_open(\"" << MONO_EXECUTE_ASSEMBLY << "\")" << std::endl;
     MonoAssembly *assembly = mono_domain_assembly_open(domain, MONO_EXECUTE_ASSEMBLY);
     if (!assembly)
     {
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    std::cout << "🔹 mono_assembly_get_image" << std::endl;
+    std::cerr << "🔹 mono_assembly_get_image" << std::endl;
     MonoImage *image = mono_assembly_get_image(assembly);
     if (!image)
     {
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     }
 
     // 🔹 Gọi entry method
-    std::cout << "🔹 mono_runtime_invoke\n";
+    std::cerr << "🔹 mono_runtime_invoke\n";
     MonoObject *exc = NULL;
     mono_runtime_invoke(entry_method, NULL, NULL, &exc);
     if (exc)
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     }
 
     // 🔹 Dọn dẹp Mono runtime
-    std::cout << "🔹 mono_jit_cleanup\n";
+    std::cerr << "🔹 mono_jit_cleanup\n";
     mono_jit_cleanup(domain);
     return 0;
 }

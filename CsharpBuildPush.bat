@@ -12,6 +12,7 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/system/lib64:/apex/com.android.runtime/lib64/b
 MONO_LOG_LEVEL=debug ^
 MONO_LOG_MASK=all ^
 MONO_LIB_NATIVE_PATH=/data/local/tmp/Mono ^
+ICU_DATA=/data/local/tmp/Mono ^
 MONO_EXECUTE_ASSEMBLY=%PUSH_DIR%/MonoHelloWorld.dll ^
 DOTNET_ENTRYPOINT_PATH=MonoHelloWorld.Program:Main ^
 %MONO_RUNTIME%
